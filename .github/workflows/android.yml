@@ -5,6 +5,9 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -80,3 +83,10 @@ jobs:
         with:
           name: Sternenpfad-APK
           path: Sternenpfad.apk
+
+      - name: Download-Link (Release) veröffentlichen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="v1.0.${{ github.run_number }}"
+          gh release create "$TAG" Sternenpfad.apk --title "Sternenpfad $TAG" --notes "Sternenpfad Android-App. Datei Sternenpfad.apk herunterladen und öffnen." --latest
