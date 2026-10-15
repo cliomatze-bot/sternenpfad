@@ -2778,7 +2778,7 @@ function askOffline(q, D) {
   return best ? best[1](D) : null;
 }
 /* Spendenlink: trage hier deinen PayPal.me-Namen ein (z. B. "MeinName"), dann öffnet sich paypal.me/MeinName/5EUR */
-var PAYPAL_ME = "";
+var PAYPAL_ME = "travelingrid";
 function donateGo(amt) {
   if (!PAYPAL_ME) { toast("Danke für dein Wohlwollen! Der Spendenlink folgt in Kürze."); return; }
   var url = "https://www.paypal.me/" + encodeURIComponent(PAYPAL_ME) + "/" + encodeURIComponent(amt) + "EUR";
