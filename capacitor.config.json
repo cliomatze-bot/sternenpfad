@@ -1,0 +1,9 @@
+{
+  "appId": "at.sternenpfad.app",
+  "appName": "Sternenpfad",
+  "webDir": "www",
+  "android": { "allowMixedContent": false, "backgroundColor": "#0a0720" },
+  "plugins": {
+    "LocalNotifications": { "smallIcon": "ic_stat_sternenpfad", "iconColor": "#F2CC6E" }
+  }
+}

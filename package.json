@@ -1,0 +1,19 @@
+{
+  "name": "sternenpfad",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sternenpfad: Astrologie, Mond, Zahlenrad und Selbstreflexion, rechnet offline",
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/app": "^6.0.0",
+    "@capacitor/browser": "^6.0.0",
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/filesystem": "^6.0.0",
+    "@capacitor/local-notifications": "^6.0.0",
+    "@capacitor/share": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5"
+  }
+}
