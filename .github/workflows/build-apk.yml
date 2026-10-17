@@ -5,6 +5,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: JDK 17 einrichten
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "17"
@@ -51,3 +54,29 @@ jobs:
           name: test-reports
           path: app/build/reports/tests/
           if-no-files-found: ignore
+
+      - name: Release mit APK veröffentlichen
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/debug/app-debug.apk dist/InstagramProfileAnalyzer-debug.apk
+          if [ -f app/build/outputs/apk/release/app-release.apk ]; then
+            cp app/build/outputs/apk/release/app-release.apk dist/InstagramProfileAnalyzer-release.apk
+          fi
+          TAG="apk-${GITHUB_RUN_NUMBER}"
+          gh release create "$TAG" dist/*.apk --target "$GITHUB_SHA" \
+            --title "Instagram Profile Analyzer (Build ${GITHUB_RUN_NUMBER})" \
+            --notes "Automatisch gebaute, installierbare APK (debug-signiert)."
+
+      - name: APK zusätzlich in Branch apk-dist ablegen
+        if: github.event_name != 'pull_request'
+        run: |
+          cd dist
+          git init -q -b apk-dist
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add *.apk
+          git commit -q -m "APK aus Build ${GITHUB_RUN_NUMBER}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}" apk-dist
