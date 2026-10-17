@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Eigenes, neutrales Symbol: abgerundeter Rahmen mit Lupe und Balken (kein Markenlogo) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:strokeColor="@color/icon_fg" android:strokeWidth="3.5" android:fillColor="#00000000"
+        android:pathData="M40,34h28a6,6 0 0 1 6,6v28a6,6 0 0 1 -6,6h-28a6,6 0 0 1 -6,-6v-28a6,6 0 0 1 6,-6z" />
+    <path android:fillColor="@color/icon_fg" android:pathData="M42,62h5v6h-5z" />
+    <path android:fillColor="@color/icon_fg" android:pathData="M50,55h5v13h-5z" />
+    <path android:fillColor="@color/icon_fg" android:pathData="M58,48h5v20h-5z" />
+    <path android:fillColor="#FFEDECF2" android:pathData="M66,39a3,3 0 1 1 -6,0a3,3 0 1 1 6,0z" />
+</vector>
