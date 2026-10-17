@@ -29,16 +29,19 @@ jobs:
       - name: Debug-APK bauen
         run: ./gradlew --no-daemon assembleDebug
 
-      - name: APK prüfen
-        run: |
-          APK=app/build/outputs/apk/debug/app-debug.apk
-          test -f "$APK"
-          ls -lh "$APK"
-          "$ANDROID_HOME"/build-tools/$(ls "$ANDROID_HOME"/build-tools | sort -V | tail -1)/apksigner verify --print-certs "$APK"
-
       - name: Release-APK bauen (mit Debug-Schlüssel signiert)
         continue-on-error: true
         run: ./gradlew --no-daemon assembleRelease
+
+      - name: APKs prüfen (Signatur, Mindest-Android-Version)
+        run: |
+          BT="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
+          for APK in app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/release/app-release.apk; do
+            [ -f "$APK" ] || continue
+            echo "== $APK"; ls -lh "$APK"
+            "$BT/apksigner" verify --min-sdk-version 21 --verbose "$APK" | grep -E "Verified|v1|v2|v3"
+            "$BT/aapt" dump badging "$APK" | grep -E "package:|sdkVersion|targetSdkVersion"
+          done
 
       - name: APKs hochladen
         uses: actions/upload-artifact@v4

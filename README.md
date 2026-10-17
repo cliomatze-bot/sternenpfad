@@ -1,6 +1,6 @@
 # Instagram Profile Analyzer
 
-Android-App (Kotlin, Jetpack Compose, MVVM, ab Android 8.0 / API 26) zur Analyse öffentlicher
+Android-App (Kotlin, Jetpack Compose, MVVM, ab Android 5.0 / API 21) zur Analyse öffentlicher
 Instagram-Profildaten und eigener Instagram-Datenexporte. Oberfläche auf Deutsch, dunkles Design.
 
 ## Funktionen

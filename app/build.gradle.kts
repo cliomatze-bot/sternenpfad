@@ -10,10 +10,10 @@ android {
 
     defaultConfig {
         applicationId = "com.ipa.analyzer"
-        minSdk = 26
+        minSdk = 21 // Android 5.0 – niedrigste von Jetpack Compose unterstützte Version
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.1.0"
         vectorDrawables { useSupportLibrary = true }
     }
 
@@ -35,7 +35,17 @@ android {
         }
     }
 
+    signingConfigs {
+        getByName("debug") {
+            // v1 (JAR) + v2/v3 signieren, damit auch ältere Geräte die APK installieren
+            enableV1Signing = true
+            enableV2Signing = true
+        }
+    }
+
     compileOptions {
+        // java.time auf Android < 8.0 bereitstellen
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -72,6 +82,8 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.7.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.3")
 
     testImplementation("junit:junit:4.13.2")
 }
