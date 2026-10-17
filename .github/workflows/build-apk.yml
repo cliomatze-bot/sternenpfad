@@ -69,7 +69,7 @@ jobs:
             gh release delete "$t" --cleanup-tag -y || true
           done
           TAG="apk-${GITHUB_RUN_NUMBER}"
-          gh release create "$TAG" dist/InstagramProfileAnalyzer.apk --target "$GITHUB_SHA" --latest \
+          gh release create "$TAG" dist/InstagramProfileAnalyzer.apk --target "$GITHUB_SHA" --latest=false \
             --title "Instagram Profile Analyzer (Build ${GITHUB_RUN_NUMBER})" \
             --notes "Installierbare APK, ab Android 5.0."
 
