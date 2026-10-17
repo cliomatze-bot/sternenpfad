@@ -29,8 +29,7 @@ jobs:
       - name: Debug-APK bauen
         run: ./gradlew --no-daemon assembleDebug
 
-      - name: Release-APK bauen (mit Debug-Schlüssel signiert)
-        continue-on-error: true
+      - name: Release-APK bauen
         run: ./gradlew --no-daemon assembleRelease
 
       - name: APKs prüfen (Signatur, Mindest-Android-Version)
@@ -58,20 +57,21 @@ jobs:
           path: app/build/reports/tests/
           if-no-files-found: ignore
 
-      - name: Release mit APK veröffentlichen
+      - name: Eine einzige APK als Download veröffentlichen
         if: github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p dist
-          cp app/build/outputs/apk/debug/app-debug.apk dist/InstagramProfileAnalyzer-debug.apk
-          if [ -f app/build/outputs/apk/release/app-release.apk ]; then
-            cp app/build/outputs/apk/release/app-release.apk dist/InstagramProfileAnalyzer-release.apk
-          fi
+          cp app/build/outputs/apk/release/app-release.apk dist/InstagramProfileAnalyzer.apk
+          # ältere APK-Releases entfernen, damit es nur eine App zum Download gibt
+          for t in $(gh release list --limit 50 --json tagName -q '.[].tagName' | grep '^apk-' || true); do
+            gh release delete "$t" --cleanup-tag -y || true
+          done
           TAG="apk-${GITHUB_RUN_NUMBER}"
-          gh release create "$TAG" dist/*.apk --target "$GITHUB_SHA" \
+          gh release create "$TAG" dist/InstagramProfileAnalyzer.apk --target "$GITHUB_SHA" --latest \
             --title "Instagram Profile Analyzer (Build ${GITHUB_RUN_NUMBER})" \
-            --notes "Automatisch gebaute, installierbare APK (debug-signiert)."
+            --notes "Installierbare APK, ab Android 5.0."
 
       - name: APK zusätzlich in Branch apk-dist ablegen
         if: github.event_name != 'pull_request'
@@ -80,6 +80,6 @@ jobs:
           git init -q -b apk-dist
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
-          git add *.apk
+          git add InstagramProfileAnalyzer.apk
           git commit -q -m "APK aus Build ${GITHUB_RUN_NUMBER}"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}" apk-dist
